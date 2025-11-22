@@ -16,22 +16,25 @@ A modern, responsive Personal Task Manager built with React, TypeScript, and Tai
 ## Installation & Setup
 
 1. Clone the repository:
+
 ```bash
 git clone <repository-url>
-cd 14-paymob
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 ```
 
 3. Start the development server:
+
 ```bash
 npm run dev
 ```
 
 4. Build for production:
+
 ```bash
 npm run build
 ```
