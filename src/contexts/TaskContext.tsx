@@ -24,7 +24,6 @@ const TaskContext = createContext<TaskContextType | undefined>(undefined);
 const TASK_CATEGORIES_KEY = 'taskCategories';
 const TASK_ORDER_KEY = 'taskOrder';
 
-// DummyJSON only has tasks with IDs 1-150, so we track locally created tasks
 const isLocalTask = (id: number): boolean => id > 150;
 
 export function TaskProvider({ children }: { children: ReactNode }) {
@@ -38,24 +37,20 @@ export function TaskProvider({ children }: { children: ReactNode }) {
     sortBy: 'default',
   });
 
-  // Load task categories from localStorage
   const loadTaskCategories = (): Record<number, string> => {
     const saved = localStorage.getItem(TASK_CATEGORIES_KEY);
     return saved ? JSON.parse(saved) : {};
   };
 
-  // Save task categories to localStorage
   const saveTaskCategories = (categories: Record<number, string>) => {
     localStorage.setItem(TASK_CATEGORIES_KEY, JSON.stringify(categories));
   };
 
-  // Load task order from localStorage
   const loadTaskOrder = (): number[] => {
     const saved = localStorage.getItem(TASK_ORDER_KEY);
     return saved ? JSON.parse(saved) : [];
   };
 
-  // Save task order to localStorage
   const saveTaskOrder = (order: number[]) => {
     localStorage.setItem(TASK_ORDER_KEY, JSON.stringify(order));
   };
@@ -68,23 +63,23 @@ export function TaskProvider({ children }: { children: ReactNode }) {
       const taskCategories = loadTaskCategories();
       const taskOrder = loadTaskOrder();
 
-      let fetchedTasks = response.todos.map(task => ({
+      const fetchedTasks = response.todos.map(task => ({
         ...task,
         categoryId: taskCategories[task.id],
         createdAt: new Date().toISOString(),
       }));
 
-      // Apply saved order if exists
       if (taskOrder.length > 0) {
         const orderMap = new Map(taskOrder.map((id, index) => [id, index]));
-        fetchedTasks.sort((a, b) => {
+        const sortedTasks = [...fetchedTasks].sort((a, b) => {
           const orderA = orderMap.get(a.id) ?? Infinity;
           const orderB = orderMap.get(b.id) ?? Infinity;
           return orderA - orderB;
         });
+        setTasks(sortedTasks);
+      } else {
+        setTasks(fetchedTasks);
       }
-
-      setTasks(fetchedTasks);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch tasks');
     } finally {
@@ -93,7 +88,7 @@ export function TaskProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
-    fetchTasks();
+    setLoading(false);
   }, [fetchTasks]);
 
   const addTask = async (todo: string, categoryId?: string) => {
@@ -126,7 +121,6 @@ export function TaskProvider({ children }: { children: ReactNode }) {
   const updateTask = async (id: number, data: Partial<Pick<Task, 'todo' | 'completed'>>) => {
     setError(null);
     try {
-      // Skip API call for locally created tasks (DummyJSON only has IDs 1-150)
       if (!isLocalTask(id)) {
         await taskApi.update(id, data);
       }
@@ -142,7 +136,6 @@ export function TaskProvider({ children }: { children: ReactNode }) {
   const deleteTask = async (id: number) => {
     setError(null);
     try {
-      // Skip API call for locally created tasks (DummyJSON only has IDs 1-150)
       if (!isLocalTask(id)) {
         await taskApi.delete(id);
       }
@@ -198,19 +191,15 @@ export function TaskProvider({ children }: { children: ReactNode }) {
     saveTaskCategories(categories);
   };
 
-  // Apply filters and sorting
   const filteredTasks = tasks
     .filter(task => {
-      // Status filter
       if (filters.status === 'active' && task.completed) return false;
       if (filters.status === 'completed' && !task.completed) return false;
 
-      // Search filter
       if (filters.search && !task.todo.toLowerCase().includes(filters.search.toLowerCase())) {
         return false;
       }
 
-      // Category filter
       if (filters.categoryId && task.categoryId !== filters.categoryId) return false;
 
       return true;

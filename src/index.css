@@ -15,7 +15,6 @@
   --color-primary-900: #1e3a8a;
 }
 
-/* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -34,12 +33,10 @@
   background: #475569;
 }
 
-/* Smooth transitions for theme changes */
 * {
   transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
-/* Animation for task items */
 @keyframes slideIn {
   from {
     opacity: 0;
@@ -55,7 +52,6 @@
   animation: slideIn 0.2s ease-out;
 }
 
-/* Drag and drop styles */
 .dragging {
   opacity: 0.5;
   transform: scale(1.02);

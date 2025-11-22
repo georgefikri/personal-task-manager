@@ -66,7 +66,6 @@ export function TaskItem({ task }: TaskItemProps) {
       } ${task.completed ? 'opacity-75' : ''}`}
     >
       <div className="flex items-start gap-3">
-        {/* Drag Handle */}
         <button
           {...attributes}
           {...listeners}
@@ -78,10 +77,9 @@ export function TaskItem({ task }: TaskItemProps) {
           </svg>
         </button>
 
-        {/* Checkbox */}
         <button
           onClick={() => toggleTask(task.id)}
-          className={`mt-0.5 w-5 h-5 rounded-full border-2 flex-shrink-0 flex items-center justify-center transition-colors ${
+          className={`mt-0.5 w-5 h-5 rounded-full border-2 shrink-0 flex items-center justify-center transition-colors ${
             task.completed
               ? 'bg-green-500 border-green-500'
               : 'border-gray-300 dark:border-gray-600 hover:border-primary-500'
@@ -94,7 +92,6 @@ export function TaskItem({ task }: TaskItemProps) {
           )}
         </button>
 
-        {/* Task Content */}
         <div className="flex-1 min-w-0">
           {isEditing ? (
             <input
@@ -114,7 +111,6 @@ export function TaskItem({ task }: TaskItemProps) {
             </p>
           )}
 
-          {/* Category Badge */}
           {category && (
             <span
               className="inline-block mt-2 px-2 py-0.5 text-xs font-medium rounded-full text-white"
@@ -125,9 +121,7 @@ export function TaskItem({ task }: TaskItemProps) {
           )}
         </div>
 
-        {/* Actions */}
         <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-          {/* Category Menu */}
           <div className="relative">
             <button
               onClick={() => setShowCategoryMenu(!showCategoryMenu)}
@@ -166,7 +160,6 @@ export function TaskItem({ task }: TaskItemProps) {
             )}
           </div>
 
-          {/* Edit */}
           <button
             onClick={() => setIsEditing(true)}
             className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400"
@@ -177,7 +170,6 @@ export function TaskItem({ task }: TaskItemProps) {
             </svg>
           </button>
 
-          {/* Delete */}
           <button
             onClick={handleDelete}
             disabled={isDeleting}

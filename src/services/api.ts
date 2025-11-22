@@ -19,19 +19,16 @@ async function handleResponse<T>(response: Response): Promise<T> {
 }
 
 export const taskApi = {
-  // Fetch all tasks
   async getAll(limit = 30, skip = 0): Promise<ApiResponse<Task>> {
     const response = await fetch(`${BASE_URL}/todos?limit=${limit}&skip=${skip}`);
     return handleResponse<ApiResponse<Task>>(response);
   },
 
-  // Fetch a specific task
   async getById(id: number): Promise<Task> {
     const response = await fetch(`${BASE_URL}/todos/${id}`);
     return handleResponse<Task>(response);
   },
 
-  // Create a new task
   async create(todo: string, userId = 1): Promise<Task> {
     const response = await fetch(`${BASE_URL}/todos/add`, {
       method: 'POST',
@@ -41,7 +38,6 @@ export const taskApi = {
     return handleResponse<Task>(response);
   },
 
-  // Update an existing task
   async update(id: number, data: Partial<Pick<Task, 'todo' | 'completed'>>): Promise<Task> {
     const response = await fetch(`${BASE_URL}/todos/${id}`, {
       method: 'PUT',
@@ -51,7 +47,6 @@ export const taskApi = {
     return handleResponse<Task>(response);
   },
 
-  // Delete a task
   async delete(id: number): Promise<Task & { isDeleted: boolean; deletedOn: string }> {
     const response = await fetch(`${BASE_URL}/todos/${id}`, {
       method: 'DELETE',
