@@ -13,6 +13,10 @@ A modern, responsive Personal Task Manager built with React, TypeScript, and Tai
 - **Responsive Design**: Mobile-first approach with support for all screen sizes
 - **Error Handling**: React ErrorBoundary for rendering errors + graceful API error handling with loading states
 
+## Vercel Demo link
+
+[Vercel Demo](https://personal-tasks-manager-tau.vercel.app/)
+
 ## Installation & Setup
 
 1. Clone the repository:
